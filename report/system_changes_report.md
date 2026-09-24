@@ -61,3 +61,33 @@ Hệ thống đã bổ sung 5 migrations mới để hỗ trợ dữ liệu đa 
 Tổng cộng có **27 file đã thay đổi** trong thư mục module và gốc dự án, với **967 dòng code được thêm mới** và **291 dòng code được lược bỏ/tối ưu**. 
 
 *Để xem toàn bộ mã nguồn thay đổi chi tiết, bạn có thể thực hiện lệnh `git diff b9a7cb95d977da8423e9b5b9ee2b9d45a9440f6d` tại terminal.*
+
+---
+
+## 5. Cập Nhật Mở Rộng Hệ Thống 6 Cơ Sở (24/09/2026)
+
+Hệ thống tiếp tục mở rộng quy mô mạng lưới phòng tiêm chủng Medicare với 2 chi nhánh mới:
+- **Medicare An Lạc Thôn**: Ấp An Ninh, Xã An Lạc Thôn, TP Cần Thơ | Hotline: `0928111233`
+- **Medicare 1000**: Đường 3/2, Xã Tân Hoà, TP Cần Thơ (Ngang chợ 1000) | Hotline: `(Cập nhật sau)`
+
+### Sơ Đồ Mạng Lưới Chi Nhánh Medicare:
+
+```mermaid
+graph TD
+    System["Hệ Thống Tiêm Chủng Medicare"] --> CoDo["1. Medicare Cờ Đỏ<br/>(Cổng BV Quân Dân Y TP Cần Thơ)"]
+    System --> PhongDien["2. Medicare Phong Điền<br/>(PKĐK Nhơn Ái)"]
+    System --> TraNoc["3. Medicare Trà Nóc<br/>(97 Lê Hồng Phong, Bình Thủy)"]
+    System --> ViThanh["4. Medicare Vị Thanh<br/>(615B Trần Hưng Đạo, Hậu Giang)"]
+    System --> AnLacThon["5. Medicare An Lạc Thôn<br/>(Ấp An Ninh, Xã An Lạc Thôn)"]
+    System --> M1000["6. Medicare 1000<br/>(Đường 3/2, Xã Tân Hoà)"]
+
+    CoDo -.->|"Giá chuẩn 100%"| PriceBase["Bảng Giá Vắc Xin Gốc (40 loại)"]
+    AnLacThon -.->|"Đồng bộ 100% giá gốc"| PriceBase
+    M1000 -.->|"Đồng bộ 100% giá gốc"| PriceBase
+```
+
+### Các Cải Tiến Đi Kèm:
+1. **[CenterSeeder.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/Database/Seeders/CenterSeeder.php)**: Cập nhật cấu hình 6 cơ sở chính thức, logic `same_as_codo` giữ nguyên `multiplier = 1.0` cho 2 cơ sở mới.
+2. **[contact.blade.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/resources/views/contact.blade.php)**: Render an toàn số điện thoại, tránh hiển thị thẻ `<a href="tel:">` rỗng khi số điện thoại ở trạng thái `(Cập nhật sau)`.
+3. **Đồng Bộ Dữ Liệu Production**: Đã đồng bộ trực tiếp lên cơ sở dữ liệu live tại `https://tiemchungcantho.vn`, bao gồm thông tin chi nhánh, mã nhúng Google Maps và 40 loại vắc xin chính hãng.
+

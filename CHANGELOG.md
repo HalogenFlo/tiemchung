@@ -1,3 +1,15 @@
+## [v6.5.94] - 2026-09-24
+
+### Add Medicare An Lạc Thôn and Medicare 1000 Branches
+
+* **Branch Network Expansion**:
+  - Added 2 official operational branches to the Medicare network: **Medicare An Lạc Thôn** (`Ấp An Ninh, Xã An Lạc Thôn, TP Cần Thơ`, Hotline: `0928111233`) and **Medicare 1000** (`Đường 3/2, Xã Tân Hoà, TP Cần Thơ (Ngang chợ 1000)`, Hotline: `(Cập nhật sau)`).
+  - Integrated full Google Maps responsive embed cards with verified place coordinates.
+* **Pricing & Vaccine Catalog Synchronization**:
+  - Synchronized complete 40 real-world vaccine catalog items and pricing directly identical to **Medicare Cờ Đỏ** (`multiplier = 1.0`) across database records and [CenterSeeder.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/Database/Seeders/CenterSeeder.php).
+* **Safe Phone Number Rendering**:
+  - Enhanced [contact.blade.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/resources/views/contact.blade.php) to conditionally render phone numbers as text rather than broken `tel:` links when numbers contain no dialable digits (e.g., `(Cập nhật sau)`).
+
 ## [v6.5.93] - 2026-08-22
 
 ### Fix Admin Header Mobile Branch Switcher Layout

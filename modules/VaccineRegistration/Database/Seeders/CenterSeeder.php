@@ -73,12 +73,37 @@ class CenterSeeder extends Seeder
                 'sort_order' => 4,
                 'is_active' => true,
             ],
+            [
+                'name' => 'Medicare An Lạc Thôn',
+                'slug' => 'medicare-an-lac-thon',
+                'address' => 'Ấp An Ninh, Xã An Lạc Thôn, TP Cần Thơ',
+                'phone' => '0928111233',
+                'zalo_phone' => '0928111233',
+                'map_url' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.0!2d105.8!3d10.0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a06700684f853f%3A0x7baac9976d3e2431!2zUGjDsm5nIHRpw6ptIGNow7puZyBWYWNjaW4gTWVkaWNhcmUgQW4gTOG6oWMgVGjDtG4!5e0!3m2!1svi!2s',
+                'working_hours' => '7:00 – 17:00 (Tất cả các ngày trong tuần kể cả Thứ 7, Chủ Nhật & Ngày Lễ)',
+                'sort_order' => 5,
+                'is_active' => true,
+                'same_as_codo' => true,
+            ],
+            [
+                'name' => 'Medicare 1000',
+                'slug' => 'medicare-1000',
+                'address' => 'Đường 3/2, Xã Tân Hoà, TP Cần Thơ (Ngang chợ 1000)',
+                'phone' => '(Cập nhật sau)',
+                'zalo_phone' => '0938 603 839',
+                'map_url' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.0!2d105.8!3d10.0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a08d00001eed99%3A0x556327d970cfa50b!2zUGjDsm5nIHRpw6ptIGNow7puZyBWYWNjaW4gTWVkaWNhcmUgMTAwMA!5e0!3m2!1svi!2s',
+                'working_hours' => '7:00 – 17:00 (Tất cả các ngày trong tuần kể cả Thứ 7, Chủ Nhật & Ngày Lễ)',
+                'sort_order' => 6,
+                'is_active' => true,
+                'same_as_codo' => true,
+            ],
         ];
 
         foreach ($centers as $center) {
             $center['slug'] = $center['slug'] ?? Str::slug($center['name']);
             $legacyNames = $center['legacy_names'] ?? [];
-            unset($center['legacy_names']);
+            $sameAsCodo = !empty($center['same_as_codo']);
+            unset($center['legacy_names'], $center['same_as_codo']);
 
             $savedCenter = Center::where('slug', $center['slug'])
                 ->orWhere('name', $center['name'])
@@ -91,8 +116,8 @@ class CenterSeeder extends Seeder
                 $savedCenter = Center::create($center);
             }
 
-            Vaccine::query()->get()->each(function (Vaccine $vaccine) use ($savedCenter) {
-                $multiplier = 1 + (max(0, (int) $savedCenter->sort_order - 1) * 0.01);
+            Vaccine::query()->get()->each(function (Vaccine $vaccine) use ($savedCenter, $sameAsCodo) {
+                $multiplier = $sameAsCodo ? 1.0 : (1 + (max(0, (int) $savedCenter->sort_order - 1) * 0.01));
                 $branchPrice = (int) (round(($vaccine->price * $multiplier) / 1000) * 1000);
                 $branchSalePrice = $vaccine->sale_price
                     ? (int) (round(($vaccine->sale_price * $multiplier) / 1000) * 1000)

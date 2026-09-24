@@ -65,7 +65,13 @@
                         </p>
                         <p style="margin: 0; display: flex; align-items: flex-start; gap: 12px; line-height: 1.6;">
                             <i data-lucide="phone-call" style="color: var(--primary-color); width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;"></i>
-                            <span><strong>Hotline / Zalo:</strong> <a href="tel:{{ $phoneHref }}" style="color: var(--primary-color); font-weight: 800; text-decoration: none; font-size: 16px;">{{ $center->phone }}</a></span>
+                            <span><strong>Hotline / Zalo:</strong> 
+                                @if($phoneHref)
+                                    <a href="tel:{{ $phoneHref }}" style="color: var(--primary-color); font-weight: 800; text-decoration: none; font-size: 16px;">{{ $center->phone }}</a>
+                                @else
+                                    <span style="color: #64748b; font-weight: 600; font-size: 15px;">{{ $center->phone }}</span>
+                                @endif
+                            </span>
                         </p>
                         <p style="margin: 0; display: flex; align-items: flex-start; gap: 12px; line-height: 1.6;">
                             <i data-lucide="clock" style="color: var(--primary-color); width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px;"></i>
