@@ -33,5 +33,8 @@ class DatabaseSeeder extends Seeder
             $this->call(\Modules\VaccineRegistration\Database\Seeders\BannerSeeder::class);
             $this->call(\Modules\VaccineRegistration\Database\Seeders\ArticleSeeder::class);
         }
+
+        // Nạp danh sách bác sĩ & nhân sự theo chi nhánh
+        $this->call(\Modules\VaccineRegistration\Database\Seeders\DoctorSeeder::class);
     }
 }

@@ -72,5 +72,10 @@ class Center extends Model
     {
         return $this->hasMany(DefaultSlot::class);
     }
+
+    public function doctors()
+    {
+        return $this->hasMany(Doctor::class);
+    }
 }
 

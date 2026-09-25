@@ -44,6 +44,11 @@ class AdminContext
         return $user?->isBranchAdmin() ? $user->center_id : null;
     }
 
+    public static function currentCenterId(): ?int
+    {
+        return self::isBranchAdmin() ? self::centerId() : self::selectedCenterId();
+    }
+
     public static function selectedCenterId(?int $requestedCenterId = null): ?int
     {
         if (self::isBranchAdmin()) {

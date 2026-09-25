@@ -27,6 +27,7 @@
     $groupWebsite = [
         'admin.articles.index', 'admin.articles.create', 'admin.articles.edit',
         'admin.banners.index', 'admin.banners.create', 'admin.banners.edit',
+        'admin.doctors.index', 'admin.doctors.create', 'admin.doctors.edit',
         'admin.live-editor'
     ];
     
@@ -58,13 +59,17 @@
             ['route' => 'admin.patients.index', 'label' => 'Hồ Sơ Bệnh Nhân', 'icon' => 'contact'],
             ['route' => 'admin.customers.index', 'label' => 'Khách Hàng & Điểm', 'icon' => 'users'],
         ];
-    } elseif (in_array($currentRoute, $groupWebsite) && $isSuperAdmin) {
+    } elseif (in_array($currentRoute, $groupWebsite)) {
         $activeGroup = 'website';
-        $subNavigation = [
-            ['route' => 'admin.articles.index', 'label' => 'Quản lý Bài Viết', 'icon' => 'newspaper'],
-            ['route' => 'admin.banners.index', 'label' => 'Quản lý Banner', 'icon' => 'image'],
-            ['route' => 'admin.live-editor', 'label' => 'Chỉnh Sửa Trực Quan', 'icon' => 'layout-template'],
-        ];
+        $subNavigation = [];
+        if ($isSuperAdmin) {
+            $subNavigation[] = ['route' => 'admin.articles.index', 'label' => 'Quản lý Bài Viết', 'icon' => 'newspaper'];
+            $subNavigation[] = ['route' => 'admin.banners.index', 'label' => 'Quản lý Banner', 'icon' => 'image'];
+        }
+        $subNavigation[] = ['route' => 'admin.doctors.index', 'label' => 'Bác Sĩ & Nhân Sự', 'icon' => 'stethoscope'];
+        if ($isSuperAdmin) {
+            $subNavigation[] = ['route' => 'admin.live-editor', 'label' => 'Chỉnh Sửa Trực Quan', 'icon' => 'layout-template'];
+        }
     } elseif (in_array($currentRoute, $groupSystem)) {
         $activeGroup = 'system';
         $subNavigation = [];
@@ -1111,10 +1116,10 @@
                         <i data-lucide="clipboard-list"></i> Đăng Ký & Khách Hàng
                     </a>
                 </li>
-                @if($isSuperAdmin ?? false)
+                @if(($isSuperAdmin ?? false) || in_array($currentRoute, $groupWebsite))
                 <li class="{{ $activeGroup === 'website' ? 'active' : '' }}">
-                    <a href="{{ route('admin.articles.index') }}">
-                        <i data-lucide="newspaper"></i> Nội Dung Website
+                    <a href="{{ ($isSuperAdmin ?? false) ? route('admin.articles.index') : route('admin.doctors.index') }}">
+                        <i data-lucide="newspaper"></i> {{ ($isSuperAdmin ?? false) ? 'Nội Dung Website' : 'Bác Sĩ & Nhân Sự' }}
                     </a>
                 </li>
                 @endif

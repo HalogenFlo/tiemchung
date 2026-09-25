@@ -66,22 +66,18 @@
             <div data-aos="fade-right">
                 <span class="section-subtitle">Câu chuyện Medicare</span>
                 <h2 class="section-title">{{ $settings['about_story_title'] ?? 'Hành trình Bảo vệ Sức khỏe Cộng đồng' }}</h2>
-                <p class="text-content">
-                    {{ $settings['about_story_desc'] ?? 'Được thành lập từ năm 2016, Medicare bắt đầu với sứ mệnh mang dịch vụ tiêm chủng an toàn, chất lượng cao và chi phí hợp lý đến gần hơn với người dân tại các huyện ngoại thành Cần Thơ như Cờ Đỏ và Thới Lai. Trải qua gần 10 năm phát triển, chúng tôi tự hào trở thành điểm tựa sức khỏe đáng tin cậy cho hàng chục ngàn gia đình.' }}
+                <p class="text-content" style="text-align: justify;">
+                    {{ $settings['about_story_desc'] ?? 'Medicare ra đời từ tâm huyết mang dịch vụ tiêm chủng an toàn, chất lượng cao với chi phí hợp lý đến mọi gia đình tại Cần Thơ. Sở hữu đội ngũ nhân sự giàu kinh nghiệm lâm sàng cùng quy trình chăm sóc y tế chuẩn hóa, chúng tôi tự tin mang đến giải pháp phòng bệnh tối ưu và sự yên tâm tuyệt đối cho khách hàng. Medicare An toàn - Uy tín - Chất lượng' }}
                 </p>
                 
-                <!-- Stat Cards -->
-                <div class="stats-container">
-                    <div class="stat-card">
-                        <div class="stat-number">{{ $settings['about_stat_exp'] ?? '10+' }}</div>
-                        <div class="stat-label">{{ $settings['about_stat_exp_lbl'] ?? 'Năm Kinh Nghiệm' }}</div>
-                    </div>
+                <!-- Stat Cards (Removed Years of Experience, Center count dynamic by branch, centered) -->
+                <div class="stats-container" style="grid-template-columns: repeat(2, 1fr); max-width: 440px; margin-left: auto; margin-right: auto;">
                     <div class="stat-card">
                         <div class="stat-number">{{ $settings['about_stat_clients'] ?? '50,000+' }}</div>
-                        <div class="stat-label">{{ $settings['about_stat_clients_lbl'] ?? 'Khách Hàng Tin Tưởng' }}</div>
+                        <div class="stat-label">{{ $settings['about_stat_clients_lbl'] ?? 'Khách Hàng Hài Lòng' }}</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">{{ $settings['about_stat_branches'] ?? '02' }}</div>
+                        <div class="stat-number">{{ sprintf('%02d', isset($centers) ? $centers->count() : \Modules\VaccineRegistration\Support\CenterContext::activeCenters()->count()) }}</div>
                         <div class="stat-label">{{ $settings['about_stat_branches_lbl'] ?? 'Trung Tâm Tiêm Chủng' }}</div>
                     </div>
                 </div>
@@ -276,45 +272,55 @@
 
     <!-- Meet Our Team Section -->
     <section class="about-section" style="border-top: 1px solid var(--border-color); padding-top: 4rem; margin-bottom: 2rem;">
-        <div style="text-align: center; max-width: 700px; margin: 0 auto;" data-aos="fade-up">
-            <span class="section-subtitle">Đội ngũ Medicare</span>
+        <div style="text-align: center; max-width: 700px; margin: 0 auto; margin-bottom: 2.5rem;" data-aos="fade-up">
+            <span class="section-subtitle">Đội ngũ Medicare{{ $currentCenter ? ' - ' . $currentCenter->name : '' }}</span>
             <h2 class="section-title">Đội Ngũ Bác Sĩ & Chuyên Gia</h2>
-            <p style="color: var(--text-muted);">Đội ngũ nhân sự y khoa chuyên môn cao, giàu kinh nghiệm và tận tâm bảo vệ sức khỏe gia đình bạn.</p>
+            <p style="color: var(--text-muted);">Đội ngũ nhân sự y khoa chuyên môn cao, giàu kinh nghiệm và tận tâm bảo vệ sức khỏe gia đình bạn tại {{ $currentCenter?->name ?? 'Medicare' }}.</p>
         </div>
 
         @php
-            $teamMembers = is_array($settings['about_team_members'] ?? null) ? $settings['about_team_members'] : json_decode($settings['about_team_members'] ?? '[]', true);
+            $hasDbDoctors = isset($doctors) && $doctors->isNotEmpty();
         @endphp
 
-        <div class="team-grid">
-            @foreach($teamMembers as $index => $member)
-                @php
-                    $avatar = $member['avatar'] ?? 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=256&q=80';
-                    if (!str_starts_with($avatar, 'http') && !str_starts_with($avatar, 'data:') && !str_starts_with($avatar, '/')) {
-                        $avatar = asset($avatar);
-                    }
-                @endphp
-                <div class="team-card" data-aos="fade-up" data-aos-delay="{{ 50 * (($index % 4) + 1) }}">
-                    <div class="team-avatar-wrapper">
-                        <img class="team-avatar" src="{{ $avatar }}" alt="{{ $member['name'] }}">
-                    </div>
-                    <h3 class="team-name">{{ $member['name'] }}</h3>
-                    <span class="team-role">{{ $member['role'] }}</span>
-                    <div class="team-socials">
-                        @if(!empty($member['zalo']))
-                        <a href="tel:{{ str_replace([' ', '-', '.'], '', $member['zalo']) }}" class="team-social-link" title="Gọi số điện thoại">
-                            <i data-lucide="phone-call" style="width: 16px; height: 16px; stroke-width: 2.5;"></i>
-                        </a>
+        @if($hasDbDoctors)
+            <div class="team-grid" id="doctorsGrid">
+                @foreach($doctors as $index => $doc)
+                    <div class="team-card doctor-item" data-aos="fade-up" data-aos-delay="{{ 50 * (($index % 4) + 1) }}">
+                        <div class="team-avatar-wrapper">
+                            <img class="team-avatar" src="{{ $doc->avatar_url }}" alt="{{ $doc->name }}">
+                        </div>
+                        <h3 class="team-name" style="margin-bottom: 2px;">{{ $doc->name }}</h3>
+                        <span class="team-role" style="margin-bottom: 6px;">{{ $doc->role ?: 'Nhân viên y tế' }}</span>
+                        
+                        @if($doc->center)
+                            <div style="margin-bottom: 12px;">
+                                <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 700; color: var(--accent-color); background: rgba(0, 75, 143, 0.08); padding: 3px 10px; border-radius: 6px;">
+                                    <i data-lucide="map-pin" style="width: 12px; height: 12px;"></i>
+                                    {{ $doc->center->name }}
+                                </span>
+                            </div>
                         @endif
-                        @if(!empty($member['facebook']))
-                        <a href="{{ $member['facebook'] }}" target="_blank" rel="noopener noreferrer" class="team-social-link" title="Facebook">
-                            <span class="team-facebook-letter">f</span>
-                        </a>
-                        @endif
+
+                        <div class="team-socials">
+                            @if(!empty($doc->phone))
+                            <a href="tel:{{ str_replace([' ', '-', '.'], '', $doc->phone) }}" class="team-social-link" title="Gọi tư vấn: {{ $doc->phone }}">
+                                <i data-lucide="phone-call" style="width: 16px; height: 16px; stroke-width: 2.5;"></i>
+                            </a>
+                            @endif
+                            @if($doc->center && !empty($doc->center->zalo_url))
+                            <a href="{{ $doc->center->zalo_url }}" target="_blank" rel="noopener noreferrer" class="team-social-link" title="Chat Zalo chi nhánh" style="font-weight: 800; font-size: 11px;">
+                                Zalo
+                            </a>
+                            @endif
+                        </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
+        @else
+            <div style="text-align: center; padding: 40px 20px; color: #64748b; font-size: 14.5px;">
+                Chi nhánh {{ $currentCenter?->name ?? 'này' }} hiện tại đang cập nhật danh sách nhân sự y tế.
+            </div>
+        @endif
     </section>
 </div>
 @endsection

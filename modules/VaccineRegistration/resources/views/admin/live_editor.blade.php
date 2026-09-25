@@ -281,22 +281,18 @@
     </div>
 
     <!-- Khung 3: Số Liệu Thống Kê -->
-    <div class="live-edit-frame" onclick="openSettingModal('about_stats', 'Chỉ Số Thống Kê', ['about_stat_exp', 'about_stat_exp_lbl', 'about_stat_clients', 'about_stat_clients_lbl', 'about_stat_branches', 'about_stat_branches_lbl'])">
+    <div class="live-edit-frame" onclick="openSettingModal('about_stats', 'Chỉ Số Thống Kê', ['about_stat_clients', 'about_stat_clients_lbl', 'about_stat_branches_lbl'])">
         <div class="edit-frame-badge">Sửa Chỉ Số Thống Kê</div>
         <div style="padding: 24px; background: #ffffff; border-radius: 12px;">
             <h4 style="margin: 0 0 16px 0; color: #475569; font-size: 13.5px; font-weight: 700;">Chỉ Số Thống Kê</h4>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; text-align: center;">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); max-width: 480px; margin: 0 auto; gap: 16px; text-align: center;">
                 <div style="padding: 12px; background: #f8fafc; border-radius: 8px;">
-                    <div style="font-size: 24px; font-weight: 900; color: var(--primary-color);">{{ $settings['about_stat_exp'] }}</div>
-                    <div style="font-size: 12px; color: #64748b;">{{ $settings['about_stat_exp_lbl'] }}</div>
+                    <div style="font-size: 24px; font-weight: 900; color: var(--primary-color);">{{ $settings['about_stat_clients'] ?? '50,000+' }}</div>
+                    <div style="font-size: 12px; color: #64748b;">{{ $settings['about_stat_clients_lbl'] ?? 'Khách Hàng Hài Lòng' }}</div>
                 </div>
                 <div style="padding: 12px; background: #f8fafc; border-radius: 8px;">
-                    <div style="font-size: 24px; font-weight: 900; color: var(--primary-color);">{{ $settings['about_stat_clients'] }}</div>
-                    <div style="font-size: 12px; color: #64748b;">{{ $settings['about_stat_clients_lbl'] }}</div>
-                </div>
-                <div style="padding: 12px; background: #f8fafc; border-radius: 8px;">
-                    <div style="font-size: 24px; font-weight: 900; color: var(--primary-color);">{{ $settings['about_stat_branches'] }}</div>
-                    <div style="font-size: 12px; color: #64748b;">{{ $settings['about_stat_branches_lbl'] }}</div>
+                    <div style="font-size: 24px; font-weight: 900; color: var(--primary-color);">{{ sprintf('%02d', \Modules\VaccineRegistration\Support\CenterContext::activeCenters()->count()) }}</div>
+                    <div style="font-size: 12px; color: #64748b;">{{ $settings['about_stat_branches_lbl'] ?? 'Trung Tâm Tiêm Chủng' }} <span style="font-size: 10px; color: #94a3b8; display: block;">(Tự động theo chi nhánh)</span></div>
                 </div>
             </div>
         </div>

@@ -78,6 +78,23 @@
                             <span><strong>Giờ làm việc:</strong> {{ $center->working_hours ?: '7:00 – 17:00' }}</span>
                         </p>
                     </div>
+
+                    @if($center->doctors && $center->doctors->isNotEmpty())
+                        <div style="margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--border-color);">
+                            <div style="font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                                <i data-lucide="stethoscope" style="width: 15px; height: 15px; color: var(--accent-color);"></i>
+                                Đội ngũ chuyên môn cơ sở:
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                @foreach($center->doctors as $doc)
+                                    <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border: 1px solid #f1f5f9;">
+                                        <span style="font-weight: 700; color: #0f172a;">{{ $doc->name }}</span>
+                                        <span style="font-size: 11.5px; color: #64748b; font-weight: 500;">{{ $doc->role ?: ($doc->title ?: 'Nhân viên y tế') }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 @if($center->map_url)

@@ -16,6 +16,7 @@ use Modules\VaccineRegistration\Http\Controllers\Admin\AdminConsultationLeadCont
 use Modules\VaccineRegistration\Http\Controllers\Admin\AdminCustomerController;
 use Modules\VaccineRegistration\Http\Controllers\Admin\AdminDashboardController;
 use Modules\VaccineRegistration\Http\Controllers\Admin\AdminDefaultSlotController;
+use Modules\VaccineRegistration\Http\Controllers\Admin\AdminDoctorController;
 use Modules\VaccineRegistration\Http\Controllers\Admin\AdminInventoryLotController;
 use Modules\VaccineRegistration\Http\Controllers\Admin\AdminLiveEditorController;
 use Modules\VaccineRegistration\Http\Controllers\Admin\AdminPatientController;
@@ -192,6 +193,10 @@ Route::middleware('web')->group(function () {
         Route::post('/settings/loyalty', [AdminLoyaltySettingController::class, 'update'])->name('settings.loyalty.update');
         Route::post('/settings/loyalty/sync', [AdminLoyaltySettingController::class, 'syncSettings'])->name('settings.loyalty.sync');
         Route::post('/settings/loyalty/reject-sync', [AdminLoyaltySettingController::class, 'rejectSync'])->name('settings.loyalty.reject-sync');
+
+        // Quản lý Bác sĩ & Nhân sự y tế theo chi nhánh
+        Route::post('/doctors/{doctor}/toggle-status', [AdminDoctorController::class, 'toggleStatus'])->name('doctors.toggle-status');
+        Route::resource('doctors', AdminDoctorController::class)->except(['show']);
 
         Route::middleware('super.admin')->group(function () {
             // Trình Chỉnh Sửa Trực Quan Xem Trước (Visual Live Page Customizer)

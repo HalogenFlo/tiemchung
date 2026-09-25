@@ -8,6 +8,8 @@ namespace Modules\VaccineRegistration\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\VaccineRegistration\Models\Banner;
+use Modules\VaccineRegistration\Models\Center;
+use Modules\VaccineRegistration\Models\Doctor;
 use Modules\VaccineRegistration\Models\Vaccine;
 use Modules\VaccineRegistration\Models\Article;
 use Modules\VaccineRegistration\Models\Setting;
@@ -162,7 +164,15 @@ class HomeController extends Controller
     {
         $isPreviewMode = $this->isPreviewMode($request);
         $settings = $this->contentService->getAll($isPreviewMode);
-        return view('vaccine::about', compact('settings', 'isPreviewMode'));
+        $centers = CenterContext::activeCenters();
+        $currentCenter = CenterContext::current();
+        $doctorsQuery = Doctor::active()->with('center')->ordered();
+        if ($currentCenter) {
+            $doctorsQuery->forCenter($currentCenter->id);
+        }
+        $doctors = $doctorsQuery->get();
+
+        return view('vaccine::about', compact('settings', 'isPreviewMode', 'centers', 'doctors', 'currentCenter'));
     }
 
     /**
@@ -183,6 +193,7 @@ class HomeController extends Controller
         $isPreviewMode = $this->isPreviewMode($request);
         $settings = $this->contentService->getAll($isPreviewMode);
         $centers = CenterContext::activeCenters();
+        $centers->load(['doctors' => fn($q) => $q->active()->ordered()]);
         $currentCenter = CenterContext::current();
         return view('vaccine::contact', compact('centers', 'currentCenter', 'settings', 'isPreviewMode'));
     }

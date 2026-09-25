@@ -1,3 +1,26 @@
+## [v6.5.95] - 2026-09-25
+
+### Branch Medical Staff & Doctor Management System
+
+* **Doctor Schema & Database Seeding**:
+  - Implemented `doctors` database migration and [Doctor.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/Models/Doctor.php) model with `center_id` foreign key association, active status scoping, and sort order.
+  - Created [DoctorSeeder.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/Database/Seeders/DoctorSeeder.php) and updated [DatabaseSeeder.php](file:///c:/Users/Admin/Desktop/tiemchung/database/seeders/DatabaseSeeder.php), seeding 16 real-world doctors, nurses, and medical staff members mapped across 5 operational branches:
+    - **Medicare Cờ Đỏ**: BS.CK1 Lê Thị Bé Tua (Bác sĩ chuyên môn tiêm chủng), CN. Nguyễn Thị Lan Vy, YS. Phan Bảo Ngọc.
+    - **Medicare Phong Điền**: BS.CK1 Lại Khắc Nhơn (Bác sĩ chuyên môn tiêm chủng), CN. Nguyễn Phan Khoa Trâm, YS. Huỳnh Thị Trà My.
+    - **Medicare Trà Nóc**: BS.CK2 Võ Thị Khánh Nguyệt (Giám đốc chuyên môn tiêm chủng), Ths.Bs Trần Quang Đạo, CN. Lâm Vũ Thái Ngọc, YS. Đặng Thị Huệ Mai.
+    - **Medicare An Lạc Thôn**: BS. Nguyễn Huỳnh Phương Quyên, CN. Phạm Ngọc Trân, YS. Trịnh Nguyễn Thuý An.
+    - **Medicare 1000**: BS. Trần Văn Đông, CN. Trần Trung Tín, ĐD. Trịnh Phương Ngân.
+* **Full Admin Management by Branch**:
+  - Created [AdminDoctorController.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/Http/Controllers/Admin/AdminDoctorController.php) supporting complete CRUD operations (Add, Edit, Delete, Toggle Active Status, Branch-specific filtering, and full text search).
+  - Built Blade admin views: `index.blade.php`, `_table.blade.php`, `_form.blade.php`, `create.blade.php`, and `edit.blade.php` with responsive layouts, photo uploading, and audit logging.
+  - Added "Bác Sĩ & Nhân Sự" menu navigation in [layouts/admin.blade.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/resources/views/layouts/admin.blade.php) and quick access shortcuts within the Centers table in [admin/centers/_table.blade.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/resources/views/admin/centers/_table.blade.php).
+* **Dynamic Frontend Presentation**:
+  - Bound doctor display on [about.blade.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/resources/views/about.blade.php) strictly to the global branch dropdown in the header navbar (`$currentCenter`), removing all redundant filter pills from the body. Switching branches at the header automatically displays only the doctors belonging to that chosen facility.
+  - Added dedicated branch medical staff roster cards to [contact.blade.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/resources/views/contact.blade.php) under each facility card.
+  - Updated Medicare Story description text on About page to client-specified content, removed the "Năm Kinh Nghiệm" stat card, and transformed the vaccination centers stat counter to automatically compute the live active branch count instead of requiring manual admin entry.
+  - Centered the two remaining stat boxes horizontally within the Story section on the About page.
+  - Resolved HTTP 500 error in `/admin/doctors` by adding `currentCenterId()` method to [AdminContext.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/Support/AdminContext.php).
+
 ## [v6.5.94] - 2026-09-24
 
 ### Add Medicare An Lạc Thôn and Medicare 1000 Branches
