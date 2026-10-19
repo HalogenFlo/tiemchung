@@ -1,3 +1,11 @@
+## [v6.5.96] - 2026-10-19
+
+### Fix Centers Table Action Buttons HTML Parsing & Layout
+
+* **HTML Table Structure Fix**:
+  - Restored missing opening `<td style="text-align: right;">` tag for the actions column in [admin/centers/_table.blade.php](file:///c:/Users/Admin/Desktop/tiemchung/modules/VaccineRegistration/resources/views/admin/centers/_table.blade.php).
+  - Fixed HTML parser foster-parenting issue where action buttons ("Bác sĩ", "Sửa", "Ngừng", "Xóa") were improperly ejected out of table rows and displayed floating as an unaligned group above the table.
+
 ## [v6.5.95] - 2026-09-25
 
 ### Branch Medical Staff & Doctor Management System

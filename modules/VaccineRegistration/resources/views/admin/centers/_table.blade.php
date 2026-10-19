@@ -35,6 +35,7 @@
                                 {{ $center->is_active ? 'Hoạt động' : 'Tạm dừng' }}
                             </span>
                         </td>
+                        <td style="text-align: right;">
                             <div style="display: inline-flex; gap: 6px; justify-content: flex-end;">
                                 <a href="{{ route('admin.doctors.index', ['center_id' => $center->id]) }}" class="btn-action-sm" title="Quản lý bác sĩ của chi nhánh này" style="background-color: var(--accent-color); color: #fff; text-decoration: none;">Bác sĩ</a>
                                 <a href="{{ route('admin.centers.edit', $center->id) }}" class="btn-action-sm">Sửa</a>
